@@ -1,16 +1,77 @@
 import React from 'react';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
-import logoImg from '../../assets/logo.png'
-import { Image } from 'react-native';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
-import { Container, Title } from './styles';
+import logoImg from '../../assets/logo.png';
 
-const SignIn = () => {
-  return <Container>
-    <Image source={logoImg} />
+import {
+  Container,
+  Title,
+  ForgotPassword,
+  ForgotPasswordText,
+  CreateAccountButton,
+  CreateAccountButtonText,
+} from './styles';
 
-    <Title>Faça seu Login</Title>
-  </Container>;
-};
+const SignIn = () => (
+  <>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flex: 1 }}
+      >
+        <Container>
+          <Image source={logoImg} />
+
+          <View>
+            <Title>Faça seu Logon</Title>
+          </View>
+
+          <Input
+            name="email"
+            icon="mail"
+            keyboardType="email-address"
+            placeholder="E-mail"
+          />
+          <Input name="password" icon="lock" placeholder="Senha" />
+
+          <Button
+            onPress={() => {
+              console.log('oi');
+            }}
+          >
+            Entrar
+          </Button>
+
+          <ForgotPassword>
+            <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
+          </ForgotPassword>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
+
+    <CreateAccountButton
+      onPress={() => {
+        console.log('oi');
+      }}
+    >
+      <Icon name="log-in" size={20} color="#ff9000" />
+      <CreateAccountButtonText>Criar conta</CreateAccountButtonText>
+    </CreateAccountButton>
+  </>
+);
 
 export default SignIn;
