@@ -50,9 +50,7 @@ const SignIn = () => {
       const { password, email } = data;
 
       try {
-        console.log('antes');
         await signIn({ email, password });
-        Alert.alert('Form Data', JSON.stringify(data));
       } catch (e) {
         console.log('erro requisição:', e);
       }

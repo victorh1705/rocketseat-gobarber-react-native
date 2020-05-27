@@ -42,8 +42,6 @@ const SignUp = () => {
       try {
         const { email, name, password } = data;
 
-        console.log('form cadastro', watch());
-
         await api.post('users', { name, email, password });
         navigation.goBack();
       } catch (e) {
