@@ -55,7 +55,7 @@ const SignIn = () => {
         console.log('erro requisição:', e);
       }
     },
-    [Alert, signIn],
+    [signIn],
   );
 
   return (

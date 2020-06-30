@@ -37,7 +37,6 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   } = useFormContext();
 
   useEffect(() => {
-    console.table('nome', name);
     register({ name });
   }, [register, name]);
 
