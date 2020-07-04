@@ -144,7 +144,7 @@ const CreateAppoinmtment: React.FC = () => {
         'Erro ao criar o agendamento, tente novamente',
       );
     }
-  }, []);
+  }, [selectedDate, selectedProvider]);
 
   const morningAvailability = useMemo(() => {
     return availability
