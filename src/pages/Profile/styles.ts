@@ -22,7 +22,7 @@ export const BackButton = styled.TouchableOpacity`
 `;
 
 export const UserAvatarButton = styled.TouchableOpacity`
-  margin-top: ${Platform.OS === 'android' ? 350 : 64}px;
+  margin-top: ${Platform.OS === 'android' ? 64 : 64}px;
 `;
 
 export const UserAvatar = styled.Image`

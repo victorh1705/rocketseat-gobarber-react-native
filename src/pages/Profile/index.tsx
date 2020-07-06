@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FormContext, useForm } from 'react-hook-form';
 import {
   KeyboardAvoidingView,
@@ -7,9 +7,12 @@ import {
   ScrollView,
   TextInput,
   View,
+  Alert,
 } from 'react-native';
 import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/Feather';
+
+import api from '../../services/api';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useAuth } from '../../hooks/AuthContext';
@@ -31,7 +34,7 @@ interface FormInputs {
 
 const SignIn = () => {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const emailRef = useRef<TextInput>(null);
   const oldPasswordRef = useRef<TextInput>(null);
@@ -49,28 +52,69 @@ const SignIn = () => {
     validationSchema: yup.object().shape({
       name: yup.string(),
       email: yup.string(),
-      old_password: yup.string(),
-      password: yup.string().when('old_password', {
-        is: (val) => !!val.length,
-        then: yup.string().required(),
-        otherwise: yup.string,
-      }),
-      password_confirmation: yup
-        .string()
-        .when('old_password', {
-          is: (val) => !!val.length,
-          then: yup.string().required(),
-          otherwise: yup.string,
-        })
-        .oneOf([yup.ref('password'), null], 'Confirmação incorreta'),
+      // old_password: yup.string(),
+      // password: yup.string().when('old_password', {
+      //   is: (val) => !!val.length,
+      //   then: yup.string().required(),
+      //   otherwise: yup.string,
+      // }),
+      // password_confirmation: yup
+      //   .string()
+      //   .when('old_password', {
+      //     is: (val) => !!val.length,
+      //     then: yup.string().required(),
+      //     otherwise: yup.string,
+      //   })
+      //   .oneOf([yup.ref('password'), undefined], 'Confirmação incorreta'),
     }),
   });
 
-  const { handleSubmit, watch, setValue } = methods;
+  const { handleSubmit, errors } = methods;
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const onSubmit = useCallback(
+    async (data) => {
+      const {
+        name,
+        email,
+        old_password,
+        password,
+        password_confirmation,
+      } = data;
+
+      const formData = {
+        name,
+        email,
+        ...(old_password
+          ? {
+              old_password,
+              password,
+              password_confirmation,
+            }
+          : {}),
+      };
+
+      console.log('envou os dados: ', { name, email });
+
+      try {
+        const response = await api.put('profile', formData);
+
+        // await updateUser(userUpdated);
+        console.log('usuario atualizado : ', response.data);
+
+        Alert.alert('Perfil atualizado com sucesso!');
+
+        navigation.goBack();
+      } catch (e) {
+        console.log(e);
+        Alert.alert('Erro no cadastro', 'Erro ao fazer cadastro');
+      }
+    },
+    [navigation],
+  );
 
   return (
     <>
@@ -81,7 +125,7 @@ const SignIn = () => {
       >
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flex: 1 }}
+          contentContainerStyle={{ flex: 0 }}
         >
           <FormContext {...methods}>
             <Container>
@@ -146,9 +190,13 @@ const SignIn = () => {
                 placeholder="Confirmar Senha"
                 secureTextEntry
                 returnKeyType="send"
+                containerStyle={{ marginBottom: 32 }}
+                onSubmitEditing={handleSubmit(onSubmit)}
               />
 
-              <Button onPress={() => {}}>Confirmar mudanças</Button>
+              <Button onPress={() => handleSubmit(onSubmit)()}>
+                Atualizar usuário
+              </Button>
             </Container>
           </FormContext>
         </ScrollView>
