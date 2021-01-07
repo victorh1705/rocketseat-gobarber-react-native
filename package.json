@@ -15,7 +15,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.4.2",
     "@react-navigation/stack": "^5.3.9",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-fns": "^2.14.0",
     "react": "16.11.0",
     "react-hook-form": "^5.7.2",
